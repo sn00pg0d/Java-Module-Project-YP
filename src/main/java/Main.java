@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.util.Random;
 
 public class Main {
 
@@ -11,12 +10,19 @@ public class Main {
         double needToPay;
         int persons = 0;
         int rand = 0;
-        rand = counter.randomizeIt(rand);
-        System.out.println("Ваш счёт составил " + rand);
+        rand = counter.randomizeIt();
+        System.out.println("Большое спасибо, что посетили наш ресторан!\n");
+        System.out.println("Ваш счёт составил: " + rand + "руб.\n");
         System.out.println("На скольких персон делить счёт?");
         persons = counter.pers(persons);
         needToPay = counter.count(rand, persons);
-        System.out.println("Каждый из вас должен, примерно " + needToPay + " руб.");
+        System.out.println("Каждый из вас должен: " + needToPay + " руб.\n");
+        System.out.println("Выберите себе игрушку из списка:");
+        System.out.println("1 - iPhone X\n2 - iPad 8\n3 - iPods 3\n0 - Выход");
+        counter.shopCalc();
+
+
+
     }
 
 }
