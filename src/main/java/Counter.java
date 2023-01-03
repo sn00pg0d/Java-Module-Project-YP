@@ -37,7 +37,7 @@ public class Counter {
             System.out.println("Надо ввести цифры в формате рубль,копейки\n");
             return enterPrice();
         }
-        //return price;
+         //return price;
     }
 
     public static void shopCalc() { // это калькулятор суммы выбранных товаров и вообще всего
