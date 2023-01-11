@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class Counter {
 
-    public static int pers() { // Исправлено, с учетом замечания, теперь не падает при строковых итд
+    public static int pers() { // ввод количества людей
         Scanner scanner = new Scanner(System.in);
         int persons = 0;
         System.out.println("Введите количество человек");
@@ -26,20 +26,19 @@ public class Counter {
 
     public static String enterName() { // ввод названия товара
         Scanner scanner = new Scanner(System.in);
-        while (true) {
-            System.out.println("Введите название товара или 'завершить' для выхода:");
-            String shopAdd = scanner.next();
-            String end = "завершить";
-            if (shopAdd.equalsIgnoreCase(end)) {
-                System.out.println("\n-------------");
-                System.out.println("Закрытие программы");
-                //break;
-                System.exit(0); // break не закрывает программу, а возобновляет цикл видимо изза return enterName()
-            }                   // буду благодарен, если подскажите как гасить приложуху без System.exit() :)
-            System.out.printf("%s добавлено в корзину\n", shopAdd);
-            System.out.println("-----------------------------\n");
-            return shopAdd;
+        //while (true) { // убрал лишний цикл
+        System.out.println("Введите название товара или 'завершить' для выхода:");
+        String shopAdd = scanner.next();
+        String end = "завершить";
+        if (shopAdd.equalsIgnoreCase(end)) {
+            System.out.println("\n-------------");
+            System.out.println("Закрытие программы");
+            System.exit(0);
         }
+        System.out.printf("%s добавлено в корзину\n", shopAdd);
+        System.out.println("-----------------------------\n");
+        return shopAdd;
+        //}
         //return enterName();
     }
 
@@ -48,9 +47,11 @@ public class Counter {
         System.out.println("ВВедите стоимость товара:");
         if (scanner.hasNextDouble()) {
             double price = scanner.nextDouble();
-            System.out.printf("Стоимость товара: %.2f\n", price);
-            System.out.println("-----------------------------\n");
-            return price;
+            if (price > 0) { // добавлено условие проверки отрицательных чисел и ноля в цене
+                System.out.printf("Стоимость товара: %.2f\n", price);
+                System.out.println("-----------------------------\n");
+                return price;
+            }
         }
         System.out.println("Вы ввели неверные данные, повторите ввод\n");
         return enterPrice();
@@ -66,17 +67,26 @@ public class Counter {
             String shopAdd = enterName();
             double price = enterPrice();
             sum = sum + price;
-            basket = (shopAdd.trim() + "\n" + basket.trim()); // при одном товаре в корзине - всё равно
-                                                              // присутствует пустое место, трим не помогает
+            basket = (shopAdd.trim() + "\n" + basket.trim());
             double otvet = sum / persons;
+
+            // никогда бы не подумал, что так сложно запилить окончания слова "рубль" -_-
+            // англоговорящим прогерам, оказывается, жить-то намного проще D:
+            // большое Вам спасибо за помощь в алгоритме, про 5-19 итд :) сам бы хрен догадался
+
             // проверка окончания в Сумме
             // начало
             int rublSum = (int) Math.floor(sum);
             String rublStr = String.valueOf(rublSum);
-            if ((rublStr.endsWith("2")) || (rublStr.endsWith("3")) || (rublStr.endsWith("4"))) {
-                rubleySumma = "рубля";
-            } else if ((rublStr.endsWith("1")) && (sum < 10)) {
+            int rublSumTwoD = rublSum%100;
+            if ((rublSumTwoD >= 5) && (rublSumTwoD <= 19)) {
+                rubleySumma = "рублей";
+            } else if (rublStr.endsWith("0")) {
+                rubleySumma = "рублей";
+            } else if (rublStr.endsWith("1")) {
                 rubleySumma = "рубль";
+            } else if ((rublStr.endsWith("2")) || (rublStr.endsWith("3")) || (rublStr.endsWith("4"))) {
+                rubleySumma = "рубля";
             } else {
                 rubleySumma = "рублей";
             }
@@ -86,16 +96,20 @@ public class Counter {
             // начало
             int rublOtv = (int) Math.floor(otvet);
             String otvetStr = String.valueOf(rublOtv);
-            if ((otvetStr.endsWith("2")) || (otvetStr.endsWith("3")) || (otvetStr.endsWith("4"))) {
-                rubleyOtvet = "рубля";
-            } else if ((otvetStr.endsWith("1")) && (otvet < 10)) {
+            int rublOtvTwoD = rublOtv%100;
+            if ((rublOtvTwoD >= 5) && (rublOtvTwoD <= 19)) {
+                rubleyOtvet = "рублей";
+            } else if (otvetStr.endsWith("0")) {
+                rubleyOtvet = "рублей";
+            } else if (otvetStr.endsWith("1")) {
                 rubleyOtvet = "рубль";
+            } else if ((otvetStr.endsWith("2")) || (otvetStr.endsWith("3")) || (otvetStr.endsWith("4"))) {
+                rubleyOtvet = "рубля";
             } else {
                 rubleyOtvet = "рублей";
             }
             // конец
 
-            // принтф - прикольно конечно, но читать как-то не очень удобно, в отличии от нескольких принтлн
             System.out.printf("\nИтого\n------------------------\nДобавлены товары:\n%s\nВсего человек: %d\nВсего товаров на сумму: %.2f %s\nКаждый из вас должен заплатить: %.2f %s\n------------------------\n", basket, persons, sum, rubleySumma, otvet, rubleyOtvet);
             System.out.println("\nХотите приобрести что-нибудь еще?");
             System.out.println("----------------------------------\n");
